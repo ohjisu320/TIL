@@ -75,3 +75,25 @@
 > 
 
 https://www.toptal.com/developers/gitignore
+
+> Git revert
+> 
+- 특정 commit을 실행 취소하는 것
+- `git revert <commit id>`
+    - commit id: hash 값 앞 4자리
+- a 수행 → b 수행 → c 수행 → revert b
+    - b 수행 commit은 남아 있으며, b를 없앴다는 기록이 최신으로 추가됨
+- 정리
+    - 변경 사항을 안전하게 실행 취소할 수 있도록 도와주는 **순방향** 실행 취소 작업
+        - 역방향도 있다?
+            - `reset`
+    - commit 기록에서 commit을 삭제하거나 분리하는 대신, 지정된 변경 사항을 반전시키는 새 commit 생성
+        - git에서 기록이 손실되는 것 방지 + 기록의 무결성과 **협업**의 신뢰성을 높임
+        - 협업할 때에는 `reset` 대신 `revert` 사용!
+- 추가 명령어
+- `git revert hash hash hash` : 여러 commit을 한꺼번에 취소 가능
+- `git revert hash..hash` : ..를 활용해서 범위 지정
+- `git revert --no-edit hash` : Vim editor 열지 않고 자동으로 진행
+- `git revert --no-commit hash`
+    - commit 하지 않고 staging area에만 올리는 것
+    - VIM editor도 열리지 않고 commit되지도 않음
