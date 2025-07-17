@@ -76,11 +76,13 @@
 
 https://www.toptal.com/developers/gitignore
 
+### Revert vs Reset + Reflog  -push 전 commit 상태에서만 적능
+
 > Git revert
 > 
-- 특정 commit을 실행 취소하는 것
-- `git revert <commit id>`
-    - commit id: hash 값 앞 4자리
+> - `git revert <commit id>`
+>     - commit id: hash 값 앞 4자리
+> - 특정 commit을 실행 취소하는 것
 - a 수행 → b 수행 → c 수행 → revert b
     - b 수행 commit은 남아 있으며, b를 없앴다는 기록이 최신으로 추가됨
 - 정리
@@ -97,3 +99,122 @@ https://www.toptal.com/developers/gitignore
 - `git revert --no-commit hash`
     - commit 하지 않고 staging area에만 올리는 것
     - VIM editor도 열리지 않고 commit되지도 않음
+    
+
+> Git reset
+> 
+> - `git reset [option] <commit id>`
+> - 이전으로 “되돌아가기” = 특정 commit으로 되돌아감
+- 작동원리
+    - 특정 commit으로 되돌아 갔을 때, 되돌아간 commit 이후의 commit은 모두 삭제
+- reset의 3가지 옵션
+    - 삭제되는 commit들의 기록을 어떤 영역에 남겨둘 것인지 옵션을 활용해 조정할 수 있
+        - `—soft`: 삭제된  commit의 기록을 staging area에 남김
+            - 다시 commit하고 싶다면 add 없이 바로 commit하면 됨
+                
+                ```bash
+                SSAFY@2□□PC081 MINGW64 ~/Desktop/reset-revert-practice/reset/soft (master)
+                $ git log
+                commit d7c85015ea5776d87ee6b494f869644d065af6ee (HEAD -> master)
+                Author: eduharryjjun <eduharryjjun@gmail.com>
+                Date:   Thu Oct 12 21:24:20 2023 +0900
+                
+                    third
+                
+                commit 91cbd74ec969ce40577658673789755440b7bd18
+                Author: eduharryjjun <eduharryjjun@gmail.com>
+                Date:   Thu Oct 12 21:24:04 2023 +0900
+                
+                    second
+                
+                commit f7b3a3d879dbfcab4ae90f1c3c7050ef0cd29913
+                Author: eduharryjjun <eduharryjjun@gmail.com>
+                Date:   Thu Oct 12 21:23:08 2023 +0900
+                
+                    first
+                
+                SSAFY@2□□PC081 MINGW64 ~/Desktop/reset-revert-practice/reset/soft (master)
+                $ git reset --soft f7b3
+                
+                SSAFY@2□□PC081 MINGW64 ~/Desktop/reset-revert-practice/reset/soft (master)
+                $ git log
+                commit f7b3a3d879dbfcab4ae90f1c3c7050ef0cd29913 (HEAD -> master)
+                Author: eduharryjjun <eduharryjjun@gmail.com>
+                Date:   Thu Oct 12 21:23:08 2023 +0900
+                
+                    first
+                    
+                SSAFY@2□□PC081 MINGW64 ~/Desktop/reset-revert-practice/reset/soft (master)
+                $ git status
+                On branch master
+                Changes to be committed:
+                  (use "git restore --staged <file>..." to unstage)
+                        new file:   2.txt
+                        new file:   3.txt
+                
+                Untracked files:
+                  (use "git add <file>..." to include in what will be committed)
+                        untracked.txt
+                
+                ```
+                
+        - `—mixed`: default: 삭제된 commit의 기록을 working directory에 남김
+            - 다시 commit하고 싶다면 add → commit해야
+                
+                ```bash
+                SSAFY@2□□PC081 MINGW64 ~/Desktop/reset-revert-practice/reset/mixed (master)
+                $ git log --oneline
+                d7c8501 (HEAD -> master) third
+                91cbd74 second
+                f7b3a3d first
+                
+                SSAFY@2□□PC081 MINGW64 ~/Desktop/reset-revert-practice/reset/mixed (master)
+                $ git reset f7b3
+                
+                SSAFY@2□□PC081 MINGW64 ~/Desktop/reset-revert-practice/reset/mixed (master)
+                $ git log --oneline
+                f7b3a3d (HEAD -> master) first
+                
+                SSAFY@2□□PC081 MINGW64 ~/Desktop/reset-revert-practice/reset/mixed (master)
+                $ git status
+                On branch master
+                Untracked files:
+                  (use "git add <file>..." to include in what will be committed)
+                        2.txt
+                        3.txt
+                        untracked.txt
+                
+                nothing added to commit but untracked files present (use "git add" to track)
+                ```
+                
+        - `—hard`: 삭제된 commit의 기록을 남기지 않음
+            
+            ```bash
+            SSAFY@2□□PC081 MINGW64 ~/Desktop/reset-revert-practice/reset/hard (master)
+            $ git log --oneline
+            d7c8501 (HEAD -> master) third
+            91cbd74 second
+            f7b3a3d first
+            
+            SSAFY@2□□PC081 MINGW64 ~/Desktop/reset-revert-practice/reset/hard (master)
+            $ git reset --hard f7b3
+            HEAD is now at f7b3a3d first
+            
+            SSAFY@2□□PC081 MINGW64 ~/Desktop/reset-revert-practice/reset/hard (master)
+            $ git log --oneline
+            f7b3a3d (HEAD -> master) first
+            
+            SSAFY@2□□PC081 MINGW64 ~/Desktop/reset-revert-practice/reset/hard (master)
+            $ git status
+            On branch master
+            Untracked files:
+              (use "git add <file>..." to include in what will be committed)
+                    untracked.txt
+            
+            nothing added to commit but untracked files present (use "git add" to track)
+            ```
+            
+            - 참고
+                - 이미 삭제한 commit으로 다시 돌아가고 싶다면?
+                    - `git reflog` : HEAD가 이전에 가리켰던 모든 commit을 보여줌
+                        - reset의 —hard 옵션을 통해 지워진 commit도 reflog로 조회하여 복구 가능
