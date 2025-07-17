@@ -218,3 +218,8 @@ https://www.toptal.com/developers/gitignore
                 - 이미 삭제한 commit으로 다시 돌아가고 싶다면?
                     - `git reflog` : HEAD가 이전에 가리켰던 모든 commit을 보여줌
                         - reset의 —hard 옵션을 통해 지워진 commit도 reflog로 조회하여 복구 가능
+                        - 
+
+###### 그럼 산출물은 그대로, commit 기록'만'을 지우고 싶을 땐? - test해보자 -> 가능한!
+`git reset --soft hash` -> `git commit --amend --no-edit`
+
