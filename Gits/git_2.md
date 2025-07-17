@@ -93,12 +93,12 @@ https://www.toptal.com/developers/gitignore
         - git에서 기록이 손실되는 것 방지 + 기록의 무결성과 **협업**의 신뢰성을 높임
         - 협업할 때에는 `reset` 대신 `revert` 사용!
 - 추가 명령어
-- `git revert hash hash hash` : 여러 commit을 한꺼번에 취소 가능
-- `git revert hash..hash` : ..를 활용해서 범위 지정
-- `git revert --no-edit hash` : Vim editor 열지 않고 자동으로 진행
-- `git revert --no-commit hash`
-    - commit 하지 않고 staging area에만 올리는 것
-    - VIM editor도 열리지 않고 commit되지도 않음
+    - `git revert hash hash hash` : 여러 commit을 한꺼번에 취소 가능
+    - `git revert hash..hash` : ..를 활용해서 범위 지정
+    - `git revert --no-edit hash` : Vim editor 열지 않고 자동으로 진행
+    - `git revert --no-commit hash`
+        - commit 하지 않고 staging area에만 올리는 것
+        - VIM editor도 열리지 않고 commit되지도 않음
     
 
 > Git reset
