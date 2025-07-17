@@ -8,5 +8,7 @@
 ## Navigation
 |Category|Description|links|
 |-|-|-|
-|bash|CLI 명령어||
-|Git|분산버전관리시스템||
+|Bashs|CLI 명령어|[bash_1.md](TIL\Bashs\bash_1.md), [bash_2.md](TIL\Bashs\bash_2.md)|
+|Gits|분산버전관리시스템|[git_1.md](TIL\Gits\git_1.md), [git_2.md](TIL\Gits\git_2.md)|
+|Markdowns|마크다운언어|[markdown_1.md](TIL\Markdowns\markdown_1.md)|
+
